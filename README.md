@@ -5,7 +5,7 @@ deforestation from multi-temporal Sentinel-2 imagery, validated against Global F
 
 *D A S K R Manognya and Divisht Dahiya — Dept. of Computer Science and Engineering, IIT Gandhinagar*
 
-## Overview
+## Overview.
 
 A natural way to detect deforestation is to train a land-cover classifier and run it on
 imagery of the same region in two years, flagging tiles that change from forest to a
