@@ -54,8 +54,8 @@ regions: Brazilian Amazon (Rondonia) and Romanian Carpathians.
 Run notebooks/deforestation_detection.ipynb top to bottom: train and evaluate the
 classifier, acquire imagery (needs a free Earth Engine account and earthengine authenticate),
 run NDVI differencing (DROP = 0.18, FRAC = 0.05), and validate against Global Forest Watch.
-Figures are written to assets/. Download EuroSAT RGB from https://zenodo.org/records/7711810
-and unzip to data/EuroSAT/. Data and model weights are gitignored.
+Figures are written to assets/. 
+Download EuroSAT RGB from the Kaggle dataset (https://www.kaggle.com/datasets/apollo2506/eurosat-dataset), which bundles the RGB and multispectral versions; the original dataset is from Helber et al. (https://zenodo.org/records/7711810). Unzip so the class folders sit at data/EuroSAT/.
 
 ## Limitations
 
@@ -64,3 +64,16 @@ finer granularity does not improve agreement, due to co-registration and edge ef
 Two-date differencing misses within-window loss that regrows, the main source of false
 negatives in fast-cycle Pacific-Northwest forestry.
 
+## Data acquisition (Google Earth Engine)
+
+The Sentinel-2 imagery and the Hansen forest-loss layer are pulled through Google Earth Engine (free for research use). One-time setup:
+
+- Create a free account at https://earthengine.google.com, register a Google Cloud project, and enable the Earth Engine API for it.
+- Install the client: `pip install earthengine-api geemap`
+- Authenticate once: `earthengine authenticate`
+
+Then edit `scripts/earth_engine_export.py`, set `PROJECT` to your Cloud project ID (and `BBOX` / years if changing the region), and run:
+
+    python scripts/earth_engine_export.py
+
+This exports five GeoTIFFs to a "deforestation" folder in Google Drive: `s2_rgb_2018.tif`, `s2_rgb_2024.tif`, `ndvi_2018.tif`, `ndvi_2024.tif`, and `hansen_lossyear.tif`. Track progress at https://code.earthengine.google.com/tasks, then download them into `data/study_region/`. Imagery uses a season-matched summer composite (1 June to 15 September), under 20% cloud, at 10 m resolution.
